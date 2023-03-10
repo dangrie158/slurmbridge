@@ -172,6 +172,26 @@ class User(Association["User"], WritableSlurmAccountManagerObject["User"]):
     def home_directory(self) -> str | None:
         return find_home_directory(self.user)
 
+    @cached_property
+    def description(self) -> str | None:
+        if not self.home_directory:
+            return None
+
+        home_directory = Path(self.home_directory)
+        description_file = home_directory / ".user_comment"
+        with suppress(PermissionError):
+            if description_file.exists():
+                return description_file.read_text()
+        return None
+
+    async def set_description(self, new_description):
+        home_directory = Path(self.home_directory)
+        description_file = home_directory / ".user_comment"
+        if not new_description:
+            description_file.unlink()
+        else:
+            description_file.write_text(new_description)
+
     def __str__(self) -> str:
         return f"User {self.user} in {self.account}"
 
