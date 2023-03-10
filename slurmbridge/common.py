@@ -1,6 +1,6 @@
-from glob import glob
 import re
-from typing import List, Optional
+from glob import glob
+from typing import List, Optional, Union
 
 
 def camel_to_snake_case(input: str) -> str:
@@ -51,7 +51,7 @@ def update_gres_value(haystack: str, needle: str, new_value: str) -> str:
     return ",".join(new_haystack_parts)
 
 
-def find_home_directory(username: str) -> str | None:
+def find_home_directory(username: str) -> Union[str, None]:
     if len(username) == 0:
         return None
 

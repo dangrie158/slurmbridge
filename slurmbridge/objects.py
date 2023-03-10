@@ -2,9 +2,11 @@ from __future__ import annotations
 
 import dataclasses
 import re
+from contextlib import suppress
 from copy import copy
 from datetime import datetime, timedelta
 from functools import cached_property
+from pathlib import Path
 from typing import (
     Any,
     ClassVar,
@@ -36,7 +38,6 @@ AssociationType = TypeVar("AssociationType", bound="Association")
 class Association(SlurmAccountManagerObject[AssociationType]):
     query_options = ("tree",)
 
-    _: dataclasses.KW_ONLY
     id: str = field(read_only=True)
     parent_id: str = field(repr=False, read_only=True)
     parent_name: str = field(repr=False, read_only=True)
@@ -203,7 +204,7 @@ class QOS(SlurmAccountManagerObject["QOS"]):
 @dataclasses.dataclass
 class Job(SlurmControlObject["Job"], SlurmCancelObject):
     job_id: str = field(primary_key=True)
-    _: dataclasses.KW_ONLY
+
     job_name: str = field(repr=False, read_only=True)
     job_state: str = field(repr=False, read_only=True)
     run_time: str = field(repr=False, read_only=True)
@@ -290,7 +291,7 @@ class Node(SlurmControlObject["Node"]):
     STATES: ClassVar[List[str]] = ["CANCEL_REBOOT", "DOWN", "DRAIN", "FUTURE", "RESUME"]
 
     node_name: str = field(primary_key=True)
-    _: dataclasses.KW_ONLY
+
     cpualloc: str | None = field(repr=False, read_only=True, default=None)
     cputot: str | None = field(repr=False, read_only=True, default=None)
     cpuload: str | None = field(repr=False, read_only=True, default=None)
@@ -299,6 +300,7 @@ class Node(SlurmControlObject["Node"]):
     boot_time: str | None = field(repr=False, read_only=True, default=None)
     state: str | None = field(repr=False, read_only=True, default=None)
     reason: str | None = field(repr=False, read_only=True, default=None)
+    partitions: str | None = field(repr=False, read_only=True, default=None)
 
     @cached_property
     def uptime(self) -> timedelta | None:

@@ -1,7 +1,6 @@
-from abc import ABC, abstractmethod
 import dataclasses
-from typing import Any, ClassVar, Generic, Sequence, Tuple, Type, TypeVar, Dict, List
-
+from abc import ABC, abstractmethod
+from typing import Any, ClassVar, Dict, Generic, List, Sequence, Tuple, Type, TypeVar
 
 READONLY = {"readonly": True}
 WRITEONLY = {"writeonly": True}
@@ -35,7 +34,6 @@ def field(
     hash=None,
     compare=True,
     metadata=None,
-    kw_only=dataclasses.MISSING,
     read_only=False,
     synthetic=False,
     write_only=False,
@@ -60,7 +58,6 @@ def field(
         hash=hash,
         compare=compare,
         metadata=metadata,
-        kw_only=kw_only,
     )
 
 
